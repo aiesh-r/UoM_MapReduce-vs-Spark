@@ -1,0 +1,20 @@
+spark-shell
+
+val df = spark.read.format("csv").option("header","true").load("s3://delayflightbucket/dataset/DelayedFlights-updated.csv");
+
+df.createOrReplaceTempView("delay_flight")
+
+spark.time {
+  val result = spark.sql("SELECT Year, avg((CarrierDelay /ArrDelay)*100) from delay_flight GROUP BY Year").show()}
+
+spark.time {
+  val result = spark.sql("SELECT Year, avg((NASDelay /ArrDelay)*100) from delay_flight GROUP BY Year").show()}
+
+spark.time {
+  val result = spark.sql("SELECT Year, avg((WeatherDelay /ArrDelay)*100) from delay_flight GROUP BY Year").show()}
+
+spark.time {
+  val result = spark.sql("SELECT Year, avg((LateAircraftDelay /ArrDelay)*100) from delay_flight GROUP BY Year").show()}
+
+spark.time {
+  val result = spark.sql("SELECT Year, avg((SecurityDelay /ArrDelay)*100) from delay_flight GROUP BY Year").show()}
